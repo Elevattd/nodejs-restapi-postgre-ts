@@ -7,8 +7,6 @@ export const getUsers = async (req: Request, res: Response) => {
 		const { rows: users }: QueryResult = await postegreSQL.query('SELECT * FROM users');
 
 		res.status(200).send({ data: users, message: '', succes: true });
-
-		res;
 	} catch (error) {
 		res.status(500).send({ data: null, message: `${(error as Error).message}`, succes: true });
 	}
@@ -20,6 +18,18 @@ export const getUserById = async (req: Request, res: Response) => {
 		res.status(200).send({ data: user, message: '', succes: true });
 	} catch (error: unknown) {
 		res.status(500).send({ data: null, message: `${(error as Error).message}`, succes: true });
+	}
+};
+
+export const getUsersByParams = async (req: Request, res: Response) => {
+	try {
+		const params = Object.keys(req.query)
+			.map((key) => `${key}=${req.query[key]}`)
+			.join(' AND ');
+		const { rows: users }: QueryResult = await postegreSQL.query(`SELECT * FROM users WHERE ${params}`);
+		res.status(200).send({ data: users, message: '', success: true });
+	} catch (error: unknown) {
+		res.status(500).send({ data: null, message: `${(error as Error).message}`, success: false });
 	}
 };
 

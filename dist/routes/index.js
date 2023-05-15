@@ -5,6 +5,7 @@ const users_controller_1 = require("../controllers/users.controller");
 const router = (0, express_1.Router)();
 router.get('/users', users_controller_1.getUsers);
 router.get('/users/:id', users_controller_1.getUserById);
+router.get('/users', users_controller_1.getUsersByParams);
 router.post('/users', users_controller_1.postUser);
 router.put('/users/:id', users_controller_1.updateUser);
 router.delete('/users/:id', users_controller_1.deleteuser);

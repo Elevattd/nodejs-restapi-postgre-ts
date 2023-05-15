@@ -9,13 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteuser = exports.updateUser = exports.postUser = exports.getUserById = exports.getUsers = void 0;
+exports.deleteuser = exports.updateUser = exports.postUser = exports.getUsersByParams = exports.getUserById = exports.getUsers = void 0;
 const database_1 = require("../database");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: users } = yield database_1.postegreSQL.query('SELECT * FROM users');
         res.status(200).send({ data: users, message: '', succes: true });
-        res;
     }
     catch (error) {
         res.status(500).send({ data: null, message: `${error.message}`, succes: true });
@@ -32,6 +31,19 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getUserById = getUserById;
+const getUsersByParams = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const params = Object.keys(req.query)
+            .map((key) => `${key}=${req.query[key]}`)
+            .join(' AND ');
+        const { rows: users } = yield database_1.postegreSQL.query(`SELECT * FROM users WHERE ${params}`);
+        res.status(200).send({ data: users, message: '', success: true });
+    }
+    catch (error) {
+        res.status(500).send({ data: null, message: `${error.message}`, success: false });
+    }
+});
+exports.getUsersByParams = getUsersByParams;
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, name } = req.body;
     try {
